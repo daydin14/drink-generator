@@ -46,7 +46,7 @@ cp .env.example .env
 
 ## GitHub Pages
 
-The site is a static Vite build. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes `dist/` to GitHub Pages on every push to `main`.
+The site is a static Vite build. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes `dist/` to GitHub Pages on every push to `master`.
 
 One-time setup in the repository settings:
 
