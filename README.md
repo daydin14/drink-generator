@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Dave's Drink Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Search cocktails, filter by what is in the cabinet, and pour a drink at random. Recipes come from [TheCocktailDB](https://www.thecocktaildb.com/api.php): name, photo, category, alcoholic or not, glass, ingredients with measures, and instructions.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Random drink from `random.php`, with a button to pour another
+- Search by name via `search.php?s=`
+- Filter by ingredient via `filter.php?i=`
+- Browse categories from `list.php?c=list`, then `filter.php?c=`
+- Ingredient list from `list.php?i=list`
+- Full recipe by id via `lookup.php?i=`
+- Loading and error states for every request
+- Responsive layout built with Tailwind CSS 4 and daisyUI 5
 
-### `npm start`
+The public test key `1` is used unless you set `VITE_COCKTAILDB_KEY`. That key is for development: ingredient filters return a single preview drink, and some lists are capped. Name search and category browse return longer lists.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Setup
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Requires Node.js 20 or newer.
 
-### `npm test`
+```bash
+npm install
+npm run dev
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Open [http://localhost:5173/drink-generator/](http://localhost:5173/drink-generator/). The dev server redirects `/` to that path. The `/drink-generator/` base matches this repo’s GitHub Pages project URL.
 
-### `npm run build`
+To use your own key locally, copy the example env file and fill it in. Do not commit `.env`.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cp .env.example .env
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+`VITE_` variables are compiled into the static site. A premium key in a public GitHub Pages build would be visible to visitors, so leave the test key in place for the public deploy.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Scripts
 
-### `npm run eject`
+| Script | What it does |
+| --- | --- |
+| `npm run dev` | Start the Vite dev server |
+| `npm run build` | Typecheck, build `dist/`, and add `404.html` for client-side routes |
+| `npm run preview` | Serve the production build |
+| `npm run lint` | Run ESLint |
+| `npm test` | Run unit tests |
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## GitHub Pages
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The site is a static Vite build. [`.github/workflows/pages.yml`](.github/workflows/pages.yml) publishes `dist/` to GitHub Pages on every push to `main`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+One-time setup in the repository settings:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Open **Settings → Pages**.
+2. Set **Build and deployment → Source** to **GitHub Actions**.
 
-## Learn More
+The published URL is `https://daydin14.github.io/drink-generator/`. Direct links such as `/drink-generator/drink/11007` work because the build copies `index.html` to `404.html`, which GitHub Pages serves for unknown paths.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Source: [github.com/daydin14/drink-generator](https://github.com/daydin14/drink-generator).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Pull requests run lint, tests, and the production build in [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
 
-### Code Splitting
+## Project layout
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+src/services/cocktailApi.ts   typed TheCocktailDB client
+src/lib/mapDrink.ts           ingredient and drink mapping
+src/hooks/useAsync.ts         loading, error, and retry state
+src/pages                    Home, Search, Random, and drink details
+```
